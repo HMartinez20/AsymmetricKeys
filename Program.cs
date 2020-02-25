@@ -26,48 +26,49 @@ namespace HashExample
 
             try
             {
-                // Create a key and save it in a container.  
-                GenKey_SaveInContainer("KeyContainer");
+                // Create keys for Alice and Bob, then save them in a containers.
+                GenKey_SaveInContainer("Alice");
+                GenKey_SaveInContainer("Bob");
 
-                // Retrieve the key from the container.  
-                GetKeyFromContainer("KeyContainer");
+                // Retrieve the keys from the containers.
+                GetKeyFromContainer("Alice");
+                GetKeyFromContainer("Bob");
 
-                // Delete the key from the container.  
-                DeleteKeyFromContainer("KeyContainer");
+                // Delete the keys from the containers.  
+                DeleteKeyFromContainer("Alice");
+                DeleteKeyFromContainer("Bob");
             }
             catch (CryptographicException e)
             {
                 Console.WriteLine(e.Message);
             }
 
+
             static void GenKey_SaveInContainer(string ContainerName)
             {
-                // Create the CspParameters object and set the key container   
-                // name used to store the RSA key pair.  
+                // Create container to hold key. 
                 CspParameters cp = new CspParameters();
                 cp.KeyContainerName = ContainerName;
 
-                // Create a new instance of RSACryptoServiceProvider that accesses  
-                // the key container MyKeyContainerName.  
+                // Create instance of RSACryptoServiceProvider to access 
+                // the key container.
                 RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(cp);
 
-                // Display the key information to the console.  
                 Console.WriteLine("Key added to container: \n  {0}", rsa.ToXmlString(true));
             }
 
             static void GetKeyFromContainer(string ContainerName)
             {
-                // Create the CspParameters object and set the key container   
-                // name used to store the RSA key pair.  
+                // Similar to GenKey, BUT if container doesn't exist,
+                // the key is generated and stored into the new container.
+                // If the container exists, the key is loaded from the
+                // container.
                 CspParameters cp = new CspParameters();
-                cp.KeyContainerName = ContainerName;
-
-                // Create a new instance of RSACryptoServiceProvider that accesses  
-                // the key container MyKeyContainerName.  
+                cp.KeyContainerName = ContainerName; 
                 RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(cp);
-
-                // Display the key information to the console.  
                 Console.WriteLine("Key retrieved from container : \n {0}", rsa.ToXmlString(true));
+
+                /* The key's Modulus is the public key */
             }
 
             static void DeleteKeyFromContainer(string ContainerName)
